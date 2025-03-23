@@ -1,0 +1,50 @@
+{
+    "name": "its-webhosting/wordpress-github-updater-demo",
+    "description": "A WordPress plugin to use and test the umdigital/wordpress-github-updater PHP package",
+    "version": "0.1.0",
+    "homepage": "https://github.com/its-webhosting/wordpress-github-updater-demo",
+    "license": [ "MIT" ],
+    "type": "wordpress-plugin",
+    "keywords": [
+        "wordpress",
+        "github",
+        "updater"
+    ],
+    "authors": [
+        {
+            "name": "Regents of the University of Michigan",
+            "homepage": "https://umich.edu/"
+        }
+    ],
+    "support": {
+        "docs": "https://github.com/its-webhosting/wordpress-github-updater-demo",
+        "issues": "https://github.com/its-webhosting/wordpress-github-updater-demo/issues",
+        "source": "https://github.com/its-webhosting/wordpress-github-updater-demo"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/its-webhosting/wordpress-github-updater"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "": "vendor/" }
+    },
+    "require": {
+        "php": ">=7.4",
+        "umdigital/wordpress-github-updater": "dev-support-prereleases"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "require-dev": {
+        "wp-coding-standards/wpcs": "^3.1"
+    },
+    "scripts": {
+        "lint": [
+            "phpcs --standard=WordPress *.php includes"
+        ]
+    }
+}

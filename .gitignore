@@ -1,0 +1,10 @@
+# Stuff specific to this repo:
+vendor/*
+composer.lock
+
+# Other stuff:
+.env*
+/.idea/
+*.swp
+*~
+*.log*
