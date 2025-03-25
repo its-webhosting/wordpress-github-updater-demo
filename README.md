@@ -11,7 +11,7 @@ WordPress plugin for using and testing the [umdigital/wordpress-github-updater](
 ```bash
 plugin_repo="its-webhosting/wordpress-github-updater-demo"
 
-plugin_url=$(curl -s "https://api.github.com/repos/${plugin_repo}/releases/latest | jq -r .zipball_url)
+plugin_url=$(curl -s "https://api.github.com/repos/${plugin_repo}/releases/latest" | jq -r .zipball_url)
 
 wp plugin install "${plugin_url}" --activate
 ```
