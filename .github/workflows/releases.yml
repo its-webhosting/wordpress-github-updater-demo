@@ -55,4 +55,4 @@ jobs:
         with:
           files: /tmp/${{ github.event.repository.name }}-${{ steps.get_version.outputs.version }}.zip
           draft: true
-          prerelease: ${{ steps.parse_version.outputs.prerelease != '' }
+          prerelease: ${{ steps.parse_version.outputs.prerelease != '' }}
