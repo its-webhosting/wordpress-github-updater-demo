@@ -11,28 +11,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: "actions/checkout@master"
+        uses: actions/checkout@v4
         id: checkout
 
-      - name: Get Tag
-        id: tag
-        run: echo "tag=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      - name: Get Version
+        id: get_version
+        run: |
+          echo "${GITHUB_REF}" | sed -E 's%^refs/tags/v?%version=%' >> $GITHUB_OUTPUT
+          echo "${GITHUB_REF}" | sed -E 's%^refs/tags/%tag=%' >> $GITHUB_OUTPUT
 
       - name: Parse Version
-        uses: madhead/semver-utils@latest
-        id: version
+        uses: madhead/semver-utils@v4
+        id: parse_version
         with:
-          version: ${{ steps.tag.outputs.tag }}
+          version: ${{ steps.get_version.outputs.version }}
 
       - name: Install PHP
-        uses: "shivammathur/setup-php@v2"
+        uses: shivammathur/setup-php@v2
         id: php
         with:
-          php-version: "latest"
-
-      - name: Install Composer
-        uses: "ramsey/composer-install@v3"
-        id: composer
+          php-version: pre-installed
+          extensions: json
+          tools: composer
+        env:
+          fail-fast: true
 
       - name: Install Dependencies
         id: deps
@@ -41,17 +43,16 @@ jobs:
       - name: Build Project
         id: build
         run: |
-          git archive -o /tmp/${{ github.event.repository.name }}-${{ steps.tag.outputs.tag }}.zip --prefix=${{ github.event.repository.name }}/ ${{ steps.tag.outputs.tag }}
+          git archive -o /tmp/${{ github.event.repository.name }}-${{ steps.get_version.outputs.version }}.zip --prefix=${{ github.event.repository.name }}/ ${{ steps.get_version.outputs.tag }}
           mkdir /tmp/${{ github.event.repository.name }}
           cp -R vendor /tmp/${{ github.event.repository.name }}/
           cd /tmp
-          zip -r ${{ github.event.repository.name }}-${{ steps.tag.outputs.tag }}.zip ${{ github.event.repository.name }}/vendor
+          zip -r ${{ github.event.repository.name }}-${{ steps.get_version.outputs.version }}.zip ${{ github.event.repository.name }}/vendor
 
       - name: Create Release
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          files: /tmp/${{ github.event.repository.name }}-${{ steps.tag.outputs.tag }}.zip
+          files: /tmp/${{ github.event.repository.name }}-${{ steps.get_version.outputs.version }}.zip
           draft: true
-          prerelease: ${{ steps.version.outputs.prerelease != '' }
-
+          prerelease: ${{ steps.parse_version.outputs.prerelease != '' }
