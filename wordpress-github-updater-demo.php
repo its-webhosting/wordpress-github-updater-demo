@@ -22,7 +22,7 @@ class GitHubUpdaterDemo
     static private $_settings = [
         'ui_type'                        => 'none',
         'simple_prereleases'             => false,
-        'advanced_update_types'          => 'normal',
+        'advanced_update_types'          => 'stable',
         'advanced_major_version_updates' => true,
         'expert_regex'                   => '',
 	    'match_releases'                 => '',
@@ -40,8 +40,6 @@ class GitHubUpdaterDemo
 	    new \Umich\GithubUpdater\Init([
 	        'repo'           => 'its-webhosting/wordpress-github-updater-demo',
 	        'slug'           => plugin_basename( __FILE__ ),
-			// If there is no upgrade UI, the plugin author would set match_release to something like
-		    // \Umich\GithubUpdater\MatchReleases::$latest or \Umich\GithubUpdater\MatchReleases::$includeBeta
 	        'match_releases' => self::$_settings['match_releases'],
         ]);
 
@@ -122,7 +120,7 @@ class GitHubUpdaterDemo
 			                                  && 'true' === $settings['simple_prereleases'];
 
 	        if ( isset( $settings['advanced_update_types'])
-	             && ! in_array( $settings['advanced_update_types'], [ 'normal', 'beta', 'alpha', 'all' ] ) ) {
+	             && ! in_array( $settings['advanced_update_types'], [ 'stable', 'rc', 'beta', 'alpha', 'all' ] ) ) {
 		        $hasErrors = true;
 		        add_settings_error(
 			        'github_updater_demo_settings_advanced_update_types',
