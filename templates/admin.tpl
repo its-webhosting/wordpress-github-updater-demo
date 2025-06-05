@@ -193,7 +193,6 @@
                 <th scope="row"><label for="ui_match_releases_regex">Equivalent regular expression</code></label></th>
                 <td>
                     <input type="text" readonly size=50 id="ui_match_releases_regex"
-                           name="github_updater_demo_settings[match_releases_regex]"
                            value="<?=(isset($guDemoSettings['match_releases_regex'])
                                ? $guDemoSettings['match_releases_regex'] : '');?>" />
                     <div class="description">

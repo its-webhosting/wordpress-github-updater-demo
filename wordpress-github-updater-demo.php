@@ -14,7 +14,8 @@ namespace UMich\GitHubUpdaterDemo;
 define( 'GITHUB_UPDATER_DEMO_PATH', dirname( __FILE__ ) . DIRECTORY_SEPARATOR );
 define( 'GITHUB_UPDATER_DEMO_SLUG', dirname( plugin_basename( __FILE__ ) ) );
 
-include_once GITHUB_UPDATER_DEMO_PATH . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+//include_once GITHUB_UPDATER_DEMO_PATH . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+include_once GITHUB_UPDATER_DEMO_PATH . 'vendor/umdigital/wordpress-github-updater/github-updater.php';
 
 
 class GitHubUpdaterDemo
@@ -99,9 +100,8 @@ class GitHubUpdaterDemo
 					add_settings_error(
 						'github_updater_demo_settings_key',
 						'error',
-						'invalid setting key: ' . esc_html( $key ),
-						'error'
-					);
+						'invalid setting key: ' . esc_html( $key )
+                    );
 				}
 			}
 
@@ -111,9 +111,8 @@ class GitHubUpdaterDemo
 		        add_settings_error(
 			        'github_updater_demo_settings_ui_type',
 			        'error',
-			        'invalid selection for UI Type',
-			        'error'
-		        );
+			        'invalid selection for UI Type'
+                );
 	        }
 
 			$settings['simple_prereleases'] = isset( $settings['simple_prereleases'] )
@@ -125,9 +124,8 @@ class GitHubUpdaterDemo
 		        add_settings_error(
 			        'github_updater_demo_settings_advanced_update_types',
 			        'error',
-			        'invalid selection for advanced UI updates-to-include',
-			        'error'
-		        );
+			        'invalid selection for advanced UI updates-to-include'
+                );
 	        }
 
 	        $settings['advanced_major_version_updates'] = isset( $settings['advanced_major_version_updates'] )
@@ -140,9 +138,8 @@ class GitHubUpdaterDemo
 						add_settings_error(
 							'github_updater_demo_settings_expert_regex',
 							'error',
-							'invalid regular expression (expert)',
-							'error'
-						);
+							'invalid regular expression (expert)'
+                        );
 					},
 			        E_WARNING
 		        );
@@ -153,25 +150,62 @@ class GitHubUpdaterDemo
 			if ( ! isset( $settings['match_releases'] )  ) {
 				$settings['match_releases'] = '';
 			} else if ( '' !== $settings['match_releases'] ) {
-				set_error_handler(
+                // handle match_releases keywords
+                $matchType = 'regex';
+                $keywords = explode( ',', $settings['match_releases'] );
+                foreach ( $keywords as $kw ) {
+                    $kw = trim( $kw );
+                    switch ( $kw ) {
+                        case 'pinMajor':
+                            if ( $matchType == 'regex' ) {
+                                $matchType = 'stable';
+                            }
+                            break;
+                        case 'stable':
+                            $matchType = 'stable';
+                            break;
+                        case 'includeRC':
+                            $matchType = 'includeRC';
+                            break;
+                        case 'includeBeta':
+                            $matchType = 'includeBeta';
+                            break;
+                        case 'includeAlpha':
+                            $matchType = 'includeAlpha';
+                            break;
+                        case 'includeAll':
+                            $matchType = 'includeAll';
+                            break;
+                        default:
+                            $hasErrors = true;
+                            add_settings_error(
+                                'github_updater_demo_settings_match_releases',
+                                'error',
+                                'Internal error: unknown match_releases keyword: ' . $kw
+                            );
+                            break;
+                    }
+                }
+                if ( $matchType == 'regex' ) {
+                    set_error_handler(
 					function ($errno, $errstr) use (&$hasErrors) {
 						$hasErrors = true;
 						add_settings_error(
 							'github_updater_demo_settings_match_releases',
 							'error',
-							'Internal error: invalid regular expression: ' . $errstr,
-							'error'
-						);
+							'Internal error: invalid regular expression: ' . $errstr
+                        );
 					},
 					E_WARNING
 				);
 				preg_match( $settings['match_releases'], '' );
 				restore_error_handler();
+                }
 			}
 
             do_action_ref_array( 'github_updater_demo_admin_settings_save', array( &$settings, &$hasErrors ) );
 
-            // No Errors we can save now
+            // No errors, we can save now
             if( !$hasErrors ) {
 				$settings = array_merge( self::$_settings, $settings );
 	            update_option( 'github_updater_demo_settings', $settings );
