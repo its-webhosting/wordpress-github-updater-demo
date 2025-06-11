@@ -14,8 +14,7 @@ namespace UMich\GitHubUpdaterDemo;
 define( 'GITHUB_UPDATER_DEMO_PATH', dirname( __FILE__ ) . DIRECTORY_SEPARATOR );
 define( 'GITHUB_UPDATER_DEMO_SLUG', dirname( plugin_basename( __FILE__ ) ) );
 
-//include_once GITHUB_UPDATER_DEMO_PATH . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
-include_once GITHUB_UPDATER_DEMO_PATH . 'vendor/umdigital/wordpress-github-updater/github-updater.php';
+include_once GITHUB_UPDATER_DEMO_PATH . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 
 class GitHubUpdaterDemo
