@@ -3,7 +3,7 @@
  * Plugin Name: WordPress GitHub Updater Demo
  * Plugin URI: https://github.com/its-webhosting/wordpress-github-updater-demo/
  * Description: A WordPress plugin to use and test the umdigital/wordpress-github-updater PHP package.
- * Version: 0.1.0
+ * Version: 1.0.0
  * Author: Regents of the University of Michigan
  * Author URI: https://umich.edu/
  * Update URI: https://github.com/its-webhosting/wordpress-github-updater-demo/

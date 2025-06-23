@@ -1,7 +1,7 @@
 {
     "name": "its-webhosting/wordpress-github-updater-demo",
     "description": "A WordPress plugin to use and test the umdigital/wordpress-github-updater PHP package",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "homepage": "https://github.com/its-webhosting/wordpress-github-updater-demo",
     "license": [ "MIT" ],
     "type": "wordpress-plugin",
@@ -31,7 +31,7 @@
         "psr-4": { "": "vendor/" }
     },
     "require": {
-        "php": ">=7.4",
+        "php": ">=7.3",
         "umdigital/wordpress-github-updater": "dev-support-prereleases"
     },
     "config": {
